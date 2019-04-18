@@ -1,0 +1,61 @@
+n=0:1:7;
+Ts=1/8000;
+xn=sin(2*pi*nTs)+.5*sin(2*pi*2000*n*Ts+3*pi/4)
+%converting fourier transform
+
+X=fft(xn)
+Y=ifft(X) %inverse fourier transform
+
+/////////
+write matlab code to determine DFT of x(n)={1,0,0,1} hence show the plot of
+x=[1 0 0 1];
+y =fft(x);
+subplot(2,1,1);
+stem(abs(y),'k')
+xlabel('m')
+ylabel('X(m)')
+title("Absolute value of DFT sequence')
+subplot(2,1,2)
+stem(angle(y),'k')
+xlabel('m')
+ylabel('angle(X(m))')
+title('angle of DFT sequence')
+//
+
+%DTFT of a rectangular pulse
+
+fs=500;
+t=-1:1/fs:1;
+x=rectpuls(t,0.12);
+subplot(2,2,1)
+plot(t,x)
+grid on
+y=fft(x);
+y=fftshift(y);
+subplot(2,2,2)
+plot(abs(y))
+grid on
+
+x=rectpuls(t,0.02);
+subplot(2,2,3)
+plot(t,x)
+grid on
+y=fft(x);
+y=fftshift(y);
+subplot(2,2,4)
+plot(abs(y))
+grid on
+
+//%DTFT on a 3d rectangular pulse
+
+x=zeros(32); %32x32 er matrix create kore
+x(12:17)=ones(6,1); % ager line er 12 theke 17 position er 6 ta 0 ke 1 kore felbe 
+% x(12:17,12:17)=ones(6);
+subplot(2,2,1) % subplot(2,2,3)
+title('2D rectangular pulse')
+mesh(x)
+x=fft(x); % fft2(x);
+x=fftshift(x);
+subplot(2,2,2) % subplot(2,2,4)
+mesh(abs(x))
+title('2D sinc in frequency domain') % 3D sinc in freq domain
