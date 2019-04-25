@@ -1,0 +1,95 @@
+%Design a 10th order bandpass butterworth filter with a passband from 100
+%to 200Hz and plot both impulse response and frequency response
+Fs=1000; %sampling frequency
+n=10;%order of the filter
+Wn=[100 200]/500; %Normalized by Fs/2
+[b,a]=butter(n,Wn); 
+figure(1)
+[y,t]=impz(b,a,101)%101 samples of impulse response
+plot(t,y)
+title('Impulse response')
+grid on
+freqz(b,a,512,Fs)
+title('Frequency response')
+
+%Design a 10th order BP Chebyshev 
+%filter of type-I with a passband 
+%from 100 to 200 Hz and plot the
+%impulse response and frequency response.
+%Consider 25dB ripple in passband.
+Fs=1000;
+n=10;
+Rp=25;
+Wn=[100 200]/(Fs/2);
+[b,a]=cheby1(n,Rp,Wn);
+[y,t]=impz(b,a,101);
+figure(1)
+plot(t,y)
+grid on
+title('Impulse Response')
+figure(2)
+freqz(b,a,512,Fs)
+title('Frequency Response')
+
+%Design a 10th order BP Elliptic %filter with passband %from 100 to 200 Hz.Plot the%impulse response and frequency response.
+%Consider 5dB ripple in passband
+%and 20dB attenuation in stopband.
+Fs=1000;%sampling frequency
+n=10;
+Rp=5,
+Rs=20;
+Wn=[100 200]/(Fs/2);
+[b,a]=ellip(n,Rp,Rs,Wn);
+figure(1);
+freqz(b,a,512,Fs)%512 samples
+title('Frequency response')
+figure(2)
+[y,t]=impz(b,a,500);
+plot(t,y)
+grid on
+title('Impulse response of Elliptic filter')
+
+%Design a 10th order BP Elliptic 
+%filter with passband 
+%from 100 to 200 Hz.Plot the
+%impulse response and frequency response.
+%Consider 5dB ripple in passband
+%and 20dB attenuation in stopband.
+Fs=1000;%sampling frequency
+n=10;
+Rp=5,
+Rs=20;
+Wn=[100 200]/(Fs/2);
+[b,a]=ellip(n,Rp,Rs,Wn);
+figure(1);
+freqz(b,a,512,Fs)%512 samples
+title('Frequency response')
+figure(2)
+[y,t]=impz(b,a,500);
+plot(t,y)
+grid on
+title('Impulse response of Elliptic filter')
+
+%A noisy signal is filtered
+%with butterworth filter and finally
+%filtered signal is compared
+%with original signal
+
+t=0:0.01:1
+Fs=1000;
+y=sin(8*pi*t) %Original Signal
+yn=y+0.5*rand(1,length(t))%Signal with noise
+subplot(2,2,1);
+plot(t,y,'k')
+title('Original Signal')
+subplot(2,2,2);
+plot(t,yn,'r')
+title('Noisy signal')
+[b,a]=butter(2,200/Fs);
+z=filter(b,a,yn);
+subplot(2,2,3);
+plot(t,z,'b')
+title('Filtered signal')
+subplot(2,2,4)
+plot(t,y,'m',t,z,'k');
+title('Comparison of original and filtered signal')
