@@ -1,0 +1,195 @@
+%%design a 10th order bandpass butter worth filter with a passband
+%%from 100 to 200hr and plot both impulse response and frequency response
+
+Fs=1000; %sampling frequency
+n=10; %order of filter
+Wn=[100 200]/500;%normalize
+[b,a]=butter(n,Wn);
+figure(1)
+[y,t]=impz(b,a,101);%sample size is 101
+plot(t,y)
+title('impulse response')
+grid on
+freqz(b,a,512,Fs)
+title('frequency response')
+Fs=1000;
+n=10;
+Rp=25;
+Wn=[100 200]/(Fs/2);%normalize
+[b,a]=cheby1(n,Rp,Wn);
+[y,t]=impz(b,a,101);
+figure(5)
+plot(t,y)
+title('impulse response')
+grid on
+freqz(b,a,512,Fs)
+title('frequency response')
+Fs=1000;
+n=10;
+Rp=5;
+Rs=20;
+Wn=[100 200]/(Fs/2);%normalize
+[b,a]=ellip(n,Rp,Rs,Wn);
+figure(1)
+freqz(b,a,512,Fs)
+title('frequency response')
+figure(2)
+[y,t]=impz(b,a,500);
+plot(t,y)
+title('impulse response')
+grid on
+t=0:0.01:1
+Fs=1000;
+y=sin(8*pi*t) %Original Signal
+yn=y+0.5*rand(1,length(t))%Signal with noise
+subplot(2,2,1);
+plot(t,y,'k')
+title('Original Signal')
+subplot(2,2,2);
+plot(t,yn,'r')
+title('Noisy signal')
+[b,a]=butter(2,200/Fs);
+z=filter(b,a,yn);
+subplot(2,2,3);
+plot(t,z,'b')
+title('Filtered signal')
+subplot(2,2,4)
+plot(t,y,'m',t,z,'k');
+title('Comparison of original and filtered signal')
+
+
+
+
+
+
+
+
+
+
+Problem-1:
+----------
+n = 0 : 1 : 7;
+Ts = 1 / 8000;
+xn = sin(2 * pi * n * Ts) + 0.5 * sin(2 * pi * 2000 * n * Ts + 3 * pi / 4);
+xn
+XX = fft(xn);
+XX
+YY = ifft(XX);
+YY
+
+Problem 2:
+-----------
+
+x = [1 0 0 1];
+y = fft(x);
+subplot(2, 1, 1);
+stem(abs(y), 'k')
+xlabel('m')
+ylabel('X(m)')
+title('Absolute value of DFT sequence')
+subplot(2, 1, 2)
+stem(angle(y), 'k')
+xlabel('m')
+ylabel('Angle(X(m))')
+title('Angle of DFT sequence')
+
+%DFT of a rectanguler pulse %
+
+Problem 3:
+----------
+fs = 500;
+t = -1:1/fs:1;
+x=rectpuls(t, 0.12)
+subplot(2, 2, 1)
+plot(t, x)
+grid on
+y = fft(x);
+y = fftshift(y);
+subplot(2,2,2)
+plot(abs(y))
+grid on
+
+x=rectpuls(t, 0.02)
+subplot(2, 2, 3)
+plot(t, x)
+grid on
+y = fft(x);
+y = fftshift(y);
+subplot(2,2,4)
+plot(abs(y))
+grid on
+
+Problem 4:
+-----------
+
+x = zeros(32)
+x(12:17)=ones(6,1);
+subplot(2,2,1)
+title('2D rectangular pulse')
+mesh(x)
+x = fft(x);
+x = fftshift(x);
+subplot(2,2,2)
+mesh(abs(x))
+title('2D sinc in frequency domain')
+
+x = zeros(32)
+x(12:17, 12:17)=ones(6);
+subplot(2,2,3)
+title('2D rectangular pulse')
+mesh(x)
+x = fft2(x);
+x = fftshift(x);
+subplot(2,2,4)
+mesh(abs(x))
+title('3D sinc in frequency domain')
+
+
+
+
+
+
+
+%plot Hamming,Hann, Kaiser
+%Window function used in design
+%of a FIR filter
+beta = 5.2;
+N=20;
+n=1:1:20;
+y=hamming(N);
+y1=hann(N);
+y2= kaiser(N,beta);;
+plot(n,y,'k^-',n,y1,'kd:',n,y2,'k*:');
+xlabel('n');
+ylabel('h(n)');
+legend('Hamming','Hann','Kaiser');
+grid on;
+
+figure;
+
+%Design a bandpass filter 
+Fn=2000;
+Fs=Fn/2;
+N=100;
+fc1=125/Fn;
+fc2=275/Fn;                     %normalized cutoff frequency of upper side
+
+
+Fc=[fc1 fc2];
+hn=fir1(N-1,Fc,kaiser(N,beta)); %FIR COEFFICIENTS
+[H,f]=freqz(hn,1,512,Fs);       %Frequency response of FR
+mag=20*log(abs(H));               %conversion in dB
+subplot(2,1,1);
+plot(f,mag),grid on;
+xlabel('Frequency in Hzz')
+ylabel('Magnitude in DB')
+title('Using Kaiser Window')
+
+hn=fir1(N-1,Fc,hamming(N));     %FIR COEFFICIENTS
+[H,f]=freqz(hn,1,512,Fs);       %Frequency response of FR
+mag= 20*log(abs(H));            %conversion in dB
+subplot(2,1,2);
+plot(f,mag),grid on;
+xlabel('Frequency in Hz');
+ylabel('Magnitude in dB');
+title('Using Hamming window');
