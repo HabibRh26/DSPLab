@@ -2,7 +2,7 @@
 %to 200Hz and plot both impulse response and frequency response
 Fs=1000; %sampling frequency
 n=10;%order of the filter
-Wn=[100 200]/500; %Normalized by Fs/2
+Wn=[100 200]/500; % Normalized by Fs/2, Wn = cut off freq,If Wn is the two-element vector [w1 w2], where w1 < w2, then butter designs a                     % bandpass or bandstop filter with lower cutoff frequency w1 and higher cutoff frequency w2
 [b,a]=butter(n,Wn); 
 figure(1)
 [y,t]=impz(b,a,101)%101 samples of impulse response
@@ -44,7 +44,7 @@ figure(1);
 freqz(b,a,512,Fs)%512 samples
 title('Frequency response')
 figure(2)
-[y,t]=impz(b,a,500);
+[y,t]=impz(b,a,500); % [h,t] = impz(b,a) returns the impulse response of the digital filter with numerator coefficients b and denominator                      % coefficients a. The function chooses the number of samples and returns the response coefficients in h and the sample times in t.
 plot(t,y)
 grid on
 title('Impulse response of Elliptic filter')
