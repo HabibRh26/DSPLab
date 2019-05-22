@@ -1,0 +1,34 @@
+%Design a bandpass FIR filter 
+%with upper and lower cutoff
+%frequency of 275 and 125(Use
+%both Hamming and Kaiser Window
+%function).Consider sampling
+%frequency of 2KHz.
+Fs=2000; %Sampling frequency
+Fn=Fs/2;
+N=100; %Number of coefficients
+beta=5.65;%beta parameter for
+          %kaiser window
+fc1=125/Fn; %normalized cutoff
+            %frequency of lower
+            %side
+fc2=275/Fn; %normalized cutoff
+            %frequency of upper
+            %side
+Fc=[fc1 fc2];
+hn=fir1(N-1, Fc, kaiser(N,beta));%FIR coefficients
+[H,f]=freqz(hn,1,512,Fs); %Frequency response of FIR
+mag=20*log(abs(H))%conversion in dB
+subplot(2,1,1)
+plot(f,mag),grid on
+xlabel('Frequenxy in Hz')
+ylabel('Magnitude in dB')
+title('Using Kaiser window')
+hn=fir1(N-1, Fc, hamming(N))%FIR coefficients
+[H,f]=freqz(hn,1,512,Fs);%frequency response of FIR
+mag=20*log(abs(H));%conversion in dB
+subplot(2,1,2)
+plot(f,mag),grid on
+xlabel('Frequency in Hz')
+ylabel('Magnitude in dB')
+title('Using Hamming Window')

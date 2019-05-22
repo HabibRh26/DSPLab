@@ -1,0 +1,14 @@
+%Plot Hamming, Hann and Kaiser 
+%Window functions used in design 
+%of a FIR filter
+beta=5.2;
+N=20;
+n=1:1:20;
+y=hamming(N);
+y1=hann(N);
+y2=kaiser(N,beta);
+plot(n,y,'k^-',n,y1,'kd:',n,y2,'k*:')
+xlabel('n')
+ylabel('h(n)')
+legend('Hamming','Hann','Kaiser')
+grid on
